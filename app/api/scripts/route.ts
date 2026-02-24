@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const scripts = await listScripts()
     return NextResponse.json(scripts)
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch scripts' }, { status: 500 })
   }
 }
