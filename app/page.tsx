@@ -1,95 +1,61 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
 
-export default function Home() {
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import type { Script } from '@/lib/types'
+import ScriptList from '@/components/ScriptList'
+import styles from './page.module.css'
+
+export default function HomePage() {
+  const router = useRouter()
+  const [scripts, setScripts] = useState<Script[]>([])
+  const [loading, setLoading] = useState(true)
+  const [creating, setCreating] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/scripts')
+      .then((r) => r.json())
+      .then(setScripts)
+      .finally(() => setLoading(false))
+  }, [])
+
+  async function handleCreate() {
+    setCreating(true)
+    const res = await fetch('/api/scripts', { method: 'POST' })
+    const script: Script = await res.json()
+    router.push(`/editor/${script.id}`)
+  }
+
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <div className={styles.logo}>
+            <span className={styles.logoDot} />
+            <span>AB Platform</span>
+          </div>
+          <button className={styles.btnPrimary} onClick={handleCreate} disabled={creating}>
+            {creating ? 'Creating…' : '+ New Script'}
+          </button>
         </div>
+      </header>
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>Scripts</h1>
+
+        {loading ? (
+          <p className={styles.empty}>Loading…</p>
+        ) : scripts.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p>No scripts yet.</p>
+            <button className={styles.btnPrimary} onClick={handleCreate} disabled={creating}>
+              Create your first script
+            </button>
+          </div>
+        ) : (
+          <ScriptList scripts={scripts} />
+        )}
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
