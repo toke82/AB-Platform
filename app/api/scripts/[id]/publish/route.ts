@@ -22,7 +22,7 @@ export async function POST(_req: Request, { params }: Params) {
       public_url: `${appUrl}/p/${published.id}.js`,
       published_at: published.published_at,
     })
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Failed to publish script' }, { status: 500 })
   }
 }

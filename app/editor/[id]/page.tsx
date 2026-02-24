@@ -43,7 +43,7 @@ export default function EditorPage() {
         setCode(data.code)
         setTitle(data.title)
       })
-      .catch((err) => {
+      .catch(() => {
       })
       .finally(() => {
         setLoading(false)

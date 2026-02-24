@@ -16,7 +16,7 @@ export async function POST() {
   try {
     const script = await createScript()
     return NextResponse.json(script, { status: 201 })
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Failed to create script' }, { status: 500 })
   }
 }

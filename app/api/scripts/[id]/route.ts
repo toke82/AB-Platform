@@ -36,7 +36,7 @@ export async function PUT(req: Request, { params }: Params) {
       updated_at: updated.updated_at,
       status: updated.status,
     })
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Failed to save draft' }, { status: 500 })
   }
 }
