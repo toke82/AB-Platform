@@ -4,6 +4,12 @@ A web editor to create, edit, and publish JavaScript snippets that can be inject
 
 ---
 
+## Tools and AI usage
+
+During the development of this project I used **Claude** and **ChatGPT** as a starting point to explore possible architectural approaches based on the brief. I prompted both tools with the technical requirements and used their output to evaluate different options — monorepo vs separated backend, different database access patterns, folder structures, and API design alternatives.
+
+After analysing the proposals in the context of the brief — a focused technical test with a clear and bounded scope — I made my own architectural decisions, favouring the simplest and cleanest solution over more elaborate ones. The reasoning behind each decision (why no separate backend, why no repository pattern, why Monaco Editor) is documented throughout this README.
+
 ## Stack
 
 | Layer | Technology | Decision |
